@@ -9,6 +9,7 @@ O = "O"
 EMPTY = None
 
 
+
 def initial_state():
     """
     Returns starting state of the board.
@@ -17,19 +18,57 @@ def initial_state():
             [EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY]]
 
+    # return [[X, EMPTY, EMPTY],
+    #         [EMPTY, EMPTY, EMPTY],
+    #         [EMPTY, EMPTY, EMPTY]]
+
+    # return [[EMPTY, O, EMPTY],
+    #         [EMPTY, EMPTY, EMPTY],
+    #         [EMPTY, EMPTY, EMPTY]]
+
+    # return [[EMPTY, EMPTY, EMPTY],
+    #         [X, O, EMPTY],
+    #         [EMPTY, EMPTY, EMPTY]]
+
 
 def player(board):
     """
     Returns player who has the next turn on a board.
     """
-    raise NotImplementedError
+
+    xCount = 0
+    oCount = 0
+
+    for i in board:
+        xCount += i.count(X)
+        oCount += i.count(O)
+
+    if xCount > oCount:
+        print('O\'s turn')
+        return O
+    else:
+        print('X\'s turn')
+        return X
+
+# player(initial_state())
 
 
 def actions(board):
     """
     Returns set of all possible actions (i, j) available on the board.
     """
-    raise NotImplementedError
+    
+    possibleActions = set()
+
+    for row in range(len(board)):
+        for col in range(len(board[row])):
+            if board[row][col] is EMPTY:
+                possibleActions.add((row, col))
+    
+    print('possibleActions', possibleActions)
+    return possibleActions
+
+# actions(initial_state())
 
 
 def result(board, action):
@@ -50,7 +89,8 @@ def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    raise NotImplementedError
+    # TODO
+    return False
 
 
 def utility(board):
