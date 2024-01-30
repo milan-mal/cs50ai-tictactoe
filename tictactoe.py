@@ -19,6 +19,21 @@ def initial_state():
             [EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY]]
 
+def stateXWinnerRow():
+    return [[X, X, X],
+            [EMPTY, EMPTY, EMPTY],
+            [EMPTY, EMPTY, EMPTY]]
+
+def stateOWinnerRow():
+    return [[EMPTY, EMPTY, EMPTY],
+            [O, O, O],
+            [EMPTY, EMPTY, EMPTY]]
+
+def stateNoWinnerRandom():
+    return [[EMPTY, X, EMPTY],
+            [O, X, O],
+            [EMPTY, O, EMPTY]]
+
     # return [[X, EMPTY, EMPTY],
     #         [EMPTY, EMPTY, EMPTY],
     #         [EMPTY, EMPTY, EMPTY]]
@@ -90,7 +105,47 @@ def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
-    raise NotImplementedError
+
+    # TODO check diagonals
+
+    # check rows/cols for a winner
+    def checkBoard(inputBoard):
+        print('checkBoard runs')
+        for i in board:
+            xCount = 0
+            oCount = 0
+            xCount += i.count(X)
+            oCount += i.count(O)
+            if xCount == 3:
+                return X
+            elif oCount == 3:
+                return O
+        return None
+    
+    # check rows for a winner
+    winner = checkBoard(board)
+    print('winner:', winner)
+
+    # check columns for a winner
+    if winner is None:
+        boardInverted = copy.deepcopy(board)
+        for row in range(3):
+            for col in range(3):
+                boardInverted[col][row] = board[row][col]
+
+        winner = checkBoard(boardInverted)
+
+    print('winner:', winner)
+    return winner
+
+print('--- check winner for initial_state ---')
+winner(initial_state())
+print('--- check winner for stateXWinnerRow ---')
+winner(stateXWinnerRow())
+print('--- check winner for stateOWinnerRow ---')
+winner(stateOWinnerRow())
+print('--- check winner for stateNoWinnerRandom ---')
+winner(stateNoWinnerRandom())
 
 
 def terminal(board):
