@@ -44,18 +44,6 @@ def stateOWinnerDiag():
             [X, O, EMPTY],
             [O, O, X]]
 
-    # return [[X, EMPTY, EMPTY],
-    #         [EMPTY, EMPTY, EMPTY],
-    #         [EMPTY, EMPTY, EMPTY]]
-
-    # return [[EMPTY, O, EMPTY],
-    #         [EMPTY, EMPTY, EMPTY],
-    #         [EMPTY, EMPTY, EMPTY]]
-
-    # return [[EMPTY, EMPTY, EMPTY],
-    #         [X, O, EMPTY],
-    #         [EMPTY, EMPTY, EMPTY]]
-
 
 def player(board):
     """
@@ -149,21 +137,22 @@ def winner(board):
         elif  board[0][2] == middle and board[2][0] == middle:
             winner = middle
 
-    print('winner:', winner)
     return winner
 
-print('--- check winner for initial_state ---')
-winner(initial_state())
-print('--- check winner for stateXWinnerRow ---')
-winner(stateXWinnerRow())
-print('--- check winner for stateOWinnerRow ---')
-winner(stateOWinnerRow())
-print('--- check winner for stateNoWinnerRandom ---')
-winner(stateNoWinnerRandom())
-print('--- check winner for stateXWinnerDiag ---')
-winner(stateXWinnerDiag())
-print('--- check winner for stateOWinnerDiag ---')
-winner(stateOWinnerDiag())
+# Tests the winner function:
+
+# print('--- check winner for initial_state ---')
+# winner(initial_state())
+# print('--- check winner for stateXWinnerRow ---')
+# winner(stateXWinnerRow())
+# print('--- check winner for stateOWinnerRow ---')
+# winner(stateOWinnerRow())
+# print('--- check winner for stateNoWinnerRandom ---')
+# winner(stateNoWinnerRandom())
+# print('--- check winner for stateXWinnerDiag ---')
+# winner(stateXWinnerDiag())
+# print('--- check winner for stateOWinnerDiag ---')
+# winner(stateOWinnerDiag())
 
 
 def terminal(board):
@@ -171,7 +160,33 @@ def terminal(board):
     Returns True if game is over, False otherwise.
     """
     # TODO
-    return False
+
+    # check for EMPTY values
+    emptyCount = 0
+    for i in board:
+        emptyCount += i.count(EMPTY)
+    
+    if emptyCount > 0:
+        if winner(board) is None:
+            return False
+        return True
+    else:
+        return True
+
+# Tests the terminal() function:
+
+# print('--- check terminal for initial_state ---')
+# print(terminal(initial_state()))
+# print('--- check terminal for stateXWinnerRow ---')
+# print(terminal(stateXWinnerRow()))
+# print('--- check terminal for stateOWinnerRow ---')
+# print(terminal(stateOWinnerRow()))
+# print('--- check terminal for stateNoWinnerRandom ---')
+# print(terminal(stateNoWinnerRandom()))
+# print('--- check terminal for stateXWinnerDiag ---')
+# print(terminal(stateXWinnerDiag()))
+# print('--- check terminal for stateOWinnerDiag ---')
+# print(terminal(stateOWinnerDiag()))
 
 
 def utility(board):
