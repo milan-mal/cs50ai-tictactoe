@@ -34,6 +34,16 @@ def stateNoWinnerRandom():
             [O, X, O],
             [EMPTY, O, EMPTY]]
 
+def stateXWinnerDiag():
+    return [[X, X, EMPTY],
+            [O, X, O],
+            [EMPTY, O, X]]
+
+def stateOWinnerDiag():
+    return [[X, X, O],
+            [X, O, EMPTY],
+            [O, O, X]]
+
     # return [[X, EMPTY, EMPTY],
     #         [EMPTY, EMPTY, EMPTY],
     #         [EMPTY, EMPTY, EMPTY]]
@@ -106,11 +116,8 @@ def winner(board):
     Returns the winner of the game, if there is one.
     """
 
-    # TODO check diagonals
-
     # check rows/cols for a winner
     def checkBoard(inputBoard):
-        print('checkBoard runs')
         for i in board:
             xCount = 0
             oCount = 0
@@ -124,7 +131,6 @@ def winner(board):
     
     # check rows for a winner
     winner = checkBoard(board)
-    print('winner:', winner)
 
     # check columns for a winner
     if winner is None:
@@ -134,6 +140,14 @@ def winner(board):
                 boardInverted[col][row] = board[row][col]
 
         winner = checkBoard(boardInverted)
+
+    # check columns for a winner
+    middle = board[1][1]
+    if middle is not None:
+        if board[0][0] == middle and board[2][2] == middle:
+            winner = middle
+        elif  board[0][2] == middle and board[2][0] == middle:
+            winner = middle
 
     print('winner:', winner)
     return winner
@@ -146,6 +160,10 @@ print('--- check winner for stateOWinnerRow ---')
 winner(stateOWinnerRow())
 print('--- check winner for stateNoWinnerRandom ---')
 winner(stateNoWinnerRandom())
+print('--- check winner for stateXWinnerDiag ---')
+winner(stateXWinnerDiag())
+print('--- check winner for stateOWinnerDiag ---')
+winner(stateOWinnerDiag())
 
 
 def terminal(board):
