@@ -58,10 +58,8 @@ def player(board):
         oCount += i.count(O)
 
     if xCount > oCount:
-        print('O\'s turn')
         return O
     else:
-        print('X\'s turn')
         return X
 
 # player(initial_state())
@@ -79,7 +77,6 @@ def actions(board):
             if board[row][col] is EMPTY:
                 possibleActions.add((row, col))
     
-    print('possibleActions', possibleActions)
     return possibleActions
 
 # actions(initial_state())
@@ -93,7 +90,6 @@ def result(board, action):
     newBoard = copy.deepcopy(board)
     newBoard[action[0]][action[1]] = X
 
-    print('newBoard', newBoard)
     return newBoard
 
 # result(initial_state(), actions(initial_state()).pop())
@@ -204,4 +200,29 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    raise NotImplementedError
+    if terminal(board):
+        return None
+
+    for action in actions(board):
+        def maxValueX(board):
+            v = -2
+
+            if terminal(board):
+                return utility(board)
+            
+            v = max(v, minValueO(result(board, action)))
+            return v
+
+        def minValueO(board):
+            v = 2
+
+            if terminal(board):
+                return utility(board)
+            
+            v = min(v, maxValueX(result(board, action)))
+            return v
+    
+    if player(board) == X:
+        minValueO(board)
+    else:
+        maxValueX(board)
