@@ -86,13 +86,22 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    
+    # check if action is valid number
+    for value in action:
+        print('for value in action')
+        print('value:', value)
+        if not isinstance( value, int ):
+            raise Exception('action coordinates not a valid number')
+        elif value > 3 or value < 0:
+            raise Exception('action coordinates not between 0 and 3')
+        
+    # check if action is a valid move
+    if board[action[0]][action[1]] is not EMPTY:
+        raise Exception('selected .clear() is already occupied')
+        
     newBoard = copy.deepcopy(board)
-    newBoard[action[0]][action[1]] = X
-
+    newBoard[action[0]][action[1]] = player( board )
     return newBoard
-
-# result(initial_state(), actions(initial_state()).pop())
 
 
 def winner(board):
@@ -101,7 +110,7 @@ def winner(board):
     """
 
     # check rows/cols for a winner
-    def checkBoard(inputBoard):
+    def checkBoard(board):
         for i in board:
             xCount = 0
             oCount = 0
@@ -125,7 +134,7 @@ def winner(board):
 
         winner = checkBoard(boardInverted)
 
-    # check columns for a winner
+    # check diagonals for a winner
     middle = board[1][1]
     if middle is not None:
         if board[0][0] == middle and board[2][2] == middle:
@@ -210,8 +219,6 @@ def minimax(board):
         v = -2
         for action in actions(board):
             v = max(v, minValueO(result(board, action)))
-            if( v == 1 ):
-                return v
         return v
 
     def minValueO(board):
@@ -221,12 +228,21 @@ def minimax(board):
         v = 2
         for action in actions(board):
             v = min(v, maxValueX(result(board, action)))
-            if( v == -1 ):
-                return v
         return v
     
+    results = []
+    resultActions = []
     if player(board) == X:
-        
-        print( 'maxValue = ', maxValueX( board ))
+        for action in actions( board ):
+            results.append( minValueO( result( board, action ) ) )
+            resultActions.append( action )
+
+        maxIndex = results.index( max( results ) )
+        return resultActions[ maxIndex ]
     else:
-        print( 'minValue = ', minValueO( board ))
+        for action in actions( board ):
+            results.append( maxValueX( result( board, action ) ) )
+            resultActions.append( action )
+
+        minIndex = results.index( min( results ) )
+        return resultActions[ minIndex ]
