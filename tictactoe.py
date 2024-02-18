@@ -10,7 +10,6 @@ O = "O"
 EMPTY = None
 
 
-
 def initial_state():
     """
     Returns starting state of the board.
@@ -19,25 +18,30 @@ def initial_state():
             [EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY]]
 
+
 def stateXWinnerRow():
     return [[X, X, X],
             [EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY]]
+
 
 def stateOWinnerRow():
     return [[EMPTY, EMPTY, EMPTY],
             [O, O, O],
             [EMPTY, EMPTY, EMPTY]]
 
+
 def stateNoWinnerRandom():
     return [[EMPTY, X, EMPTY],
             [O, X, O],
             [EMPTY, O, EMPTY]]
 
+
 def stateXWinnerDiag():
     return [[X, X, EMPTY],
             [O, X, O],
             [EMPTY, O, X]]
+
 
 def stateOWinnerDiag():
     return [[X, X, O],
@@ -88,9 +92,7 @@ def result(board, action):
     """
     # check if action is valid number
     for value in action:
-        print('for value in action')
-        print('value:', value)
-        if not isinstance( value, int ):
+        if not isinstance(value, int):
             raise Exception('action coordinates not a valid number')
         elif value > 3 or value < 0:
             raise Exception('action coordinates not between 0 and 3')
@@ -100,7 +102,7 @@ def result(board, action):
         raise Exception('selected .clear() is already occupied')
         
     newBoard = copy.deepcopy(board)
-    newBoard[action[0]][action[1]] = player( board )
+    newBoard[action[0]][action[1]] = player(board)
     return newBoard
 
 
@@ -139,7 +141,7 @@ def winner(board):
     if middle is not None:
         if board[0][0] == middle and board[2][2] == middle:
             winner = middle
-        elif  board[0][2] == middle and board[2][0] == middle:
+        elif board[0][2] == middle and board[2][0] == middle:
             winner = middle
 
     return winner
@@ -197,9 +199,9 @@ def utility(board):
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
 
-    if(winner(board) == X):
+    if (winner(board) == X):
         return 1
-    elif(winner(board) == O):
+    elif (winner(board) == O):
         return -1
     else:
         return 0
@@ -218,7 +220,10 @@ def minimax(board):
         
         v = -2
         for action in actions(board):
-            v = max(v, minValueO(result(board, action)))
+            minO = minValueO(result(board, action))
+            if minO < v:
+                break
+            v = max(v, minO)
         return v
 
     def minValueO(board):
@@ -227,22 +232,25 @@ def minimax(board):
         
         v = 2
         for action in actions(board):
-            v = min(v, maxValueX(result(board, action)))
+            maxX = maxValueX(result(board, action))
+            if maxX > v:
+                break
+            v = min(v, maxX)
         return v
     
     results = []
     resultActions = []
     if player(board) == X:
-        for action in actions( board ):
-            results.append( minValueO( result( board, action ) ) )
-            resultActions.append( action )
+        for action in actions(board):
+            results.append(minValueO(result(board, action)))
+            resultActions.append(action)
 
-        maxIndex = results.index( max( results ) )
-        return resultActions[ maxIndex ]
+        maxIndex = results.index(max(results))
+        return resultActions[maxIndex]
     else:
-        for action in actions( board ):
-            results.append( maxValueX( result( board, action ) ) )
-            resultActions.append( action )
+        for action in actions(board):
+            results.append(maxValueX(result(board, action)))
+            resultActions.append(action)
 
-        minIndex = results.index( min( results ) )
-        return resultActions[ minIndex ]
+        minIndex = results.index(min(results))
+        return resultActions[minIndex]
